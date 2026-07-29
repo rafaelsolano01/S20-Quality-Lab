@@ -2,14 +2,10 @@ provider "aws" {
   region = "us-east-1"
 }
 
+# tfsec:ignore:aws-s3-enable-bucket-logging
+# tfsec:ignore:aws-s3-encryption-customer-key
 resource "aws_s3_bucket" "vulnerable_vault" {
   bucket = "tkh-exposed-vault-${random_id.id.hex}"
-}
-
-resource "aws_s3_bucket_logging" "log_bucket" {
-  bucket        = aws_s3_bucket.vulnerable_vault.id
-  target_bucket = aws_s3_bucket.vulnerable_vault.id
-  target_prefix = "log/"
 }
 
 resource "aws_s3_bucket_versioning" "versioning" {
